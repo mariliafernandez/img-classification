@@ -8,19 +8,20 @@ data = pd.read_csv('deepFeatures.csv')
 x = data.T[1:].T 
 y = data.T[0:1].T # Target: first row
 
-# Spliting the data into train and test set
-x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=2)
+# Spliting the data into train and test set Dataframes
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
 # Column identifier
 col = y.columns.tolist()[0]
 
-print('\nNumbers of items in each group before SMOTE')
+print('\nNumber of data in imbalanced dataset:')
 for i in range(7):
-    print('Group #', i,': ', len(y[y[col] == i]))
+    print('Group #', i,': ', len(y_train[y_train[col] == i]))
 
 smt = SMOTE()
+# x_train and y_train are now arrays
 x_train, y_train = smt.fit_sample(x_train,  np.ravel(y_train,order='C'))
 
-print('\n\nNumbers of items in each group after SMOTE')
+print('\nNumber of data in balanced dataset using SMOTE:')
 for i in range(7):
-    print('Group #', i,': ', len(y_train == i))
+    print('Group #', i,': ', len(y_train[y_train == i])) 
